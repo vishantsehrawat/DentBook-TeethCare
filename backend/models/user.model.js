@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("mongoose-type-email");
 
-const dentalUserSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: mongoose.SchemaTypes.Email, required: true, unique: true },
@@ -176,6 +176,6 @@ const dentalUserSchema = mongoose.Schema(
   { versionKey: false, timestamps: true }
 );
 
-const DentalUserModel = mongoose.model("dentalUser", dentalUserSchema);
+const UserModel = mongoose.model("user", userSchema);
 
-module.exports = { DentalUserModel };
+module.exports = { UserModel };
