@@ -1,9 +1,6 @@
 const express = require("express");
+const userRouter = express.Router();
 
-const { UserModel } = require("../models/user.model");
-const { BlacklistModel } = require("../models/blacklist.model");
-const { uuidv4 } = require("../configs/uuidGenerator");
-const { authMiddleware } = require("../middlewares/authMiddleware.middleware");
 const {
   registerUser,
   userLogin,
@@ -19,9 +16,6 @@ const {
 
 require("dotenv").config();
 
-const userRouter = express();
-
-userRouter.use(express.json());
 userRouter.post("/login", userLogin);
 
 userRouter.post("/register", registerUser);
@@ -39,3 +33,7 @@ userRouter.get("/newtoken", authMiddleware, generateNewToken);
 userRouter.patch("/update/:id", authMiddleware, updateUserDetails);
 
 userRouter.get("/get", getAllUsers);
+
+module.exports = {
+  userRouter,
+};

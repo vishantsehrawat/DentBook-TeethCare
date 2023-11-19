@@ -3,9 +3,8 @@ const cors = require("cors");
 const app = express();
 
 require("dotenv").config();
-const { connection } = require("./configs/dbConnection");
+const { mongoConnection } = require("./database/mongodb.connection");
 const { userRouter } = require("./routes/user.routes");
-
 // ^ middlewares
 app.use(cors());
 app.use(express.json());
@@ -30,7 +29,7 @@ app.get("/", async (req, res) => {
 app.listen(process.env.PORT, async () => {
   try {
     console.log("checking redis , db and server status");
-    await connection;
+    await mongoConnection;
     console.log("connected to db ");
   } catch (err) {
     console.log("error | connection", err);
