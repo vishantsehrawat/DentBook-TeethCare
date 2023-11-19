@@ -92,7 +92,11 @@ const userSchema = new mongoose.Schema(
       },
     },
 
-    role: { type: String, enum: ["user", "admin"], default: "user" }, // not much useful here but still can be used differently
+    role: {
+      type: String,
+      enum: ["user", "admin", "superadmin"],
+      default: "user",
+    }, // not much useful here but still can be used differently
 
     isAccountEmailVerified: { type: Boolean, default: false }, // email verification
     isActive: { type: Boolean, default: true },

@@ -95,8 +95,14 @@ const userLogout = async (req, res) => {
   }
 };
 
+// ! generateNewToken not working right now
 const generateNewToken = async (req, res) => {
-  const refreshToken = req.headers.authorization;
+  // const refreshToken = req.headers.authorization;
+  const refreshToken = req.headers.authorization.split(" ")[1];
+  console.log(
+    "🚀 ~ file: user.controller.js:101 ~ generateNewToken ~ refreshToken:",
+    refreshToken
+  );
 
   try {
     var decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
@@ -106,7 +112,6 @@ const generateNewToken = async (req, res) => {
         process.env.TOKEN_SECRET,
         { expiresIn: "7d" }
       );
-      redisClient.set("jwttoken", token);
       return res.status(200).json({
         message: "New token generated",
         token,
