@@ -7,9 +7,13 @@ const { BlacklistModel } = require("../models/blacklist.model");
 
 const registerUser = async (req, res) => {
   const userData = req.body;
+  // // console.log(
+  // // "🚀 ~ file: user.controller.js:10 ~ registerUser ~ userData:",
+  // // userData
+  // // );
 
   try {
-    req.body.uniqueUserId = uuidv4();
+    req.body.userUid = uuidv4();
     let alreadyPresent = await UserModel.findOne({ email: userData.email });
     if (alreadyPresent) {
       return res.status(400).json({
@@ -35,12 +39,19 @@ const registerUser = async (req, res) => {
 
 const userLogin = async (req, res) => {
   const user = req.body;
+  // console.log("🚀 ~ file: user.controller.js:42 ~ userLogin ~ user:", user);
 
   try {
     const myUser = await UserModel.findOne({ email: user.email });
     if (myUser) {
       bcrypt.compare(user.password, myUser.password, function (err, result) {
-        // Token generation logic
+        if (err || !result) {
+          return res.status(400).json({
+            message: "Invalid credentials",
+            success: false,
+          });
+        }
+
         var token = jwt.sign({ userId: myUser._id }, process.env.TOKEN_SECRET, {
           expiresIn: "7d",
         });
@@ -49,14 +60,10 @@ const userLogin = async (req, res) => {
           process.env.REFRESH_TOKEN_SECRET,
           { expiresIn: "24d" }
         );
-        redisClient.set("jwttoken", token);
-        redisClient.set("refreshtoken", refreshToken);
-        store.set("barberUser", myUser, token, refreshToken);
         return res.status(200).json({
           message: "User logged in",
           token,
           refreshToken,
-          usernameforchat: myUser.name,
           userId: myUser._id,
           success: true,
         });
@@ -76,11 +83,11 @@ const userLogin = async (req, res) => {
 };
 
 const userLogout = async (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  console.log("🚀 ~ file: user.controller.js:87 ~ userLogout ~ token:", token);
   try {
-    const token = await redisClient.get("jwttoken");
     const blacklist = new BlacklistModel({ token });
     await blacklist.save();
-    store.remove("barberUser");
     return res.status(200).json({ message: "Logged out", success: true });
   } catch (error) {
     console.log(error);
