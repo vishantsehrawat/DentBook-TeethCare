@@ -26,4 +26,16 @@ userRouter.post("/login", userLogin);
 
 userRouter.post("/register", registerUser);
 
+userRouter.get("/resetUserPassword", authMiddleware, resetPassword);
+
+userRouter.post("/saveNewPassword", authMiddleware, saveNewPassword);
+
+userRouter.post("/verifyOtp", authMiddleware, verifyOtp);
+
+userRouter.post("/logout", authMiddleware, userLogout);
+
+userRouter.get("/newtoken", authMiddleware, generateNewToken);
+
+userRouter.patch("/update/:id", authMiddleware, updateUserDetails);
+
 userRouter.get("/get", getAllUsers);
