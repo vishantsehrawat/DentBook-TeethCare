@@ -176,6 +176,9 @@ const userSchema = new mongoose.Schema(
       procedureDone: { type: String },
       feedback: { type: String },
     },
+    speakEasy: {
+      secretToken: { type: String },
+    },
   },
   { versionKey: false, timestamps: true }
 );

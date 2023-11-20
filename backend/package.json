@@ -21,10 +21,13 @@
     "mongoose": "^7.3.0",
     "mongoose-type-email": "^1.1.2",
     "node-fetch": "^3.3.1",
+    "nodemailer": "^6.9.7",
     "nodemon": "^2.0.22",
     "razorpay": "^2.8.6",
     "redis": "^4.6.7",
+    "speakeasy": "^2.0.0",
     "store": "^2.0.12",
+    "twilio": "^4.19.0",
     "uuid": "^9.0.0"
   }
 }

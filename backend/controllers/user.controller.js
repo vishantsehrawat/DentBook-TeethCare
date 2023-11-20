@@ -4,13 +4,16 @@ const store = require("store");
 const { uuidv4 } = require("../configs/uuidGenerator");
 const { UserModel } = require("../models/user.model");
 const { BlacklistModel } = require("../models/blacklist.model");
+const speakeasy = require("speakeasy");
+const { sendEmailForVerification } = require("../configs/sendEmail");
+const { sendSmsForVerification } = require("../configs/sendSms");
 
 const registerUser = async (req, res) => {
   const userData = req.body;
-  // // console.log(
-  // // "🚀 ~ file: user.controller.js:10 ~ registerUser ~ userData:",
-  // // userData
-  // // );
+  // // // console.log(
+  // // // "🚀 ~ file: user.controller.js:10 ~ registerUser ~ userData:",
+  // // // userData
+  // // // );
 
   try {
     req.body.userUid = uuidv4();
@@ -39,7 +42,7 @@ const registerUser = async (req, res) => {
 
 const userLogin = async (req, res) => {
   const user = req.body;
-  // console.log("🚀 ~ file: user.controller.js:42 ~ userLogin ~ user:", user);
+  // // console.log("🚀 ~ file: user.controller.js:42 ~ userLogin ~ user:", user);
 
   try {
     const myUser = await UserModel.findOne({ email: user.email });
@@ -84,7 +87,7 @@ const userLogin = async (req, res) => {
 
 const userLogout = async (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
-  console.log("🚀 ~ file: user.controller.js:87 ~ userLogout ~ token:", token);
+  // console.log("🚀 ~ file: user.controller.js:87 ~ userLogout ~ token:", token);
   try {
     const blacklist = new BlacklistModel({ token });
     await blacklist.save();
@@ -99,10 +102,10 @@ const userLogout = async (req, res) => {
 const generateNewToken = async (req, res) => {
   // const refreshToken = req.headers.authorization;
   const refreshToken = req.headers.authorization.split(" ")[1];
-  console.log(
-    "🚀 ~ file: user.controller.js:101 ~ generateNewToken ~ refreshToken:",
-    refreshToken
-  );
+  // console.log(
+  // "🚀 ~ file: user.controller.js:101 ~ generateNewToken ~ refreshToken:",
+  // refreshToken
+  // );
 
   try {
     var decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
@@ -153,6 +156,7 @@ const updateUserDetails = async (req, res) => {
   }
 };
 
+// ! adding admin rbac pending so skipping for now
 const getAllUsers = async (req, res) => {
   try {
     const users = await UserModel.find();
@@ -166,7 +170,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-const resetPassword = async (req, res) => {
+const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -178,36 +182,69 @@ const resetPassword = async (req, res) => {
         .json({ message: "User not found", success: false });
     }
 
-    const resetToken = generateResetToken(); // Replace with your reset token generation logic
-
-    await sendResetToken(user.email, resetToken); // Replace with logic to send reset token via email or SMS
-
-    user.resetToken = resetToken;
+    // Generate a secret and save it to the user document
+    const secret = speakeasy.generateSecret();
+    console.log(
+      "🚀 ~ file: user.controller.js:186 ~ forgotPassword ~ secret:",
+      secret
+    );
+    // debugger
+    user.speakEasy.secretToken = secret.base32; // storing it inside user model
     await user.save();
 
+    //^ will send below generated token to user through email or sms
+    const token = speakeasy.totp({
+      secret: secret.base32,
+      encoding: "base32",
+    });
+    // await sendEmailForVerification(user._id, email, token); //* sending mail using nodemailer
+    await sendSmsForVerification(user.phone, token); // * sending sms using  twilio
     return res.status(200).json({
-      message: "Password reset link sent successfully",
+      message: "Reset token sent successfully",
       success: true,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       message: "Internal server error",
+      error: error,
       success: false,
     });
   }
 };
+// * we have compare our sent otp with the otp saved in user document
 
 const saveNewPassword = async (req, res) => {
   try {
-    const { email, newPassword } = req.body;
+    const { email, newPassword, otp } = req.body;
+    console.log(
+      "🚀 ~ file: user.controller.js:214 ~ saveNewPassword ~ req.body:",
+      req.body
+    );
 
     const user = await UserModel.findOne({ email });
+    // console.log(
+    //   "🚀 ~ file: user.controller.js:217 ~ saveNewPassword ~ user:",
+    //   user
+    // );
 
     if (!user) {
       return res
         .status(404)
         .json({ message: "User not found", success: false });
+    }
+
+    const isValidToken = speakeasy.totp.verify({
+      secret: user.speakEasy.secretToken,
+      encoding: "base32",
+      token: otp,
+    });
+    console.log(
+      "🚀 ~ file: user.controller.js:228 ~ saveNewPassword ~ isValidToken:",
+      isValidToken
+    );
+    if (!isValidToken) {
+      return res.status(400).json({ message: "Invalid token", success: false });
     }
 
     const hash = bcrypt.hashSync(newPassword, 4);
@@ -266,7 +303,7 @@ module.exports = {
   generateNewToken,
   updateUserDetails,
   getAllUsers,
-  resetPassword,
   saveNewPassword,
   verifyOtp,
+  forgotPassword,
 };

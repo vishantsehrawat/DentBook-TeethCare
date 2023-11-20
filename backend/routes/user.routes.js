@@ -9,9 +9,10 @@ const {
   generateNewToken,
   updateUserDetails,
   getAllUsers,
-  resetPassword,
+  // resetPassword,
   saveNewPassword,
   verifyOtp,
+  forgotPassword,
 } = require("../controllers/user.controller");
 // const cors =  require("cors")
 
@@ -25,15 +26,17 @@ userRouter.get("/newtoken", authMiddleware, generateNewToken);
 
 userRouter.patch("/update/:id", authMiddleware, updateUserDetails);
 
-userRouter.get("/resetUserPassword", authMiddleware, resetPassword);
+userRouter.get("/get", getAllUsers); //! need to add superadmin rbac here
+
+userRouter.get("/forgotPassword", authMiddleware, forgotPassword);
+
+// userRouter.get("/resetUserPassword", authMiddleware, resetPassword);
 
 userRouter.post("/saveNewPassword", authMiddleware, saveNewPassword);
 
 userRouter.post("/verifyOtp", authMiddleware, verifyOtp);
 
 userRouter.post("/logout", authMiddleware, userLogout);
-
-userRouter.get("/get", getAllUsers); //! need to add superadmin rbac here 
 
 module.exports = {
   userRouter,
