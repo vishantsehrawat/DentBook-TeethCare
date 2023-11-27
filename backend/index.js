@@ -5,10 +5,16 @@ const app = express();
 require("dotenv").config();
 const { mongoConnection } = require("./database/mongodb.connection");
 const { userRouter } = require("./routes/user.routes");
+const { dentistRouter } = require("./routes/dentist.routes");
+const { errorHandler } = require("./errors/errorHandler");
 // ^ middlewares
 app.use(cors());
 app.use(express.json());
 app.use("/user", userRouter);
+app.use("/dentist", dentistRouter);
+
+//~ Centralized Error handler
+app.use(errorHandler); // * will be used at the end
 
 //home route
 app.get("/", async (req, res) => {

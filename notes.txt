@@ -1,0 +1,3 @@
+## features 
+1 centralized error handling for some of the routes
+2 consistent response for the application

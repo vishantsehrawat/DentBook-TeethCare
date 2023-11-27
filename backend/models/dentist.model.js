@@ -8,9 +8,9 @@ const dentistSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     gender: { type: String, enum: ["male", "female", "other"] },
     dateOfBirth: { type: Date },
-
     practiceName: { type: String, required: true },
     registrationNumber: { type: String, required: true, unique: true },
+    dentistUid: { type: String, unique: true },
     specialization: {
       type: [
         {
