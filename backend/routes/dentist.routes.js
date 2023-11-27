@@ -5,11 +5,8 @@ const { authMiddleware } = require("../middlewares/authMiddleware");
 const {
   registerDentist,
   dentistLogin,
-  dentistLogout,
-  generateNewToken,
   updateDentistDetails,
   getAllDentists,
-  forgotPassword,
   getDentistById,
   deleteDentistById,
   updateDentistPassword,
@@ -23,15 +20,9 @@ dentistRouter.post("/login", dentistLogin);
 
 dentistRouter.post("/register", registerDentist);
 
-dentistRouter.get("/newtoken", authMiddleware, generateNewToken);
-
 dentistRouter.patch("/update/:id", authMiddleware, updateDentistDetails);
 
 dentistRouter.get("/get", getAllDentists);
-
-dentistRouter.get("/forgotPassword", authMiddleware, forgotPassword);
-
-dentistRouter.post("/logout", authMiddleware, dentistLogout);
 
 dentistRouter.get("/:id", authMiddleware, getDentistById);
 
