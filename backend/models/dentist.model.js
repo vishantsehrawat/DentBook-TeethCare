@@ -51,8 +51,24 @@ const dentistSchema = new mongoose.Schema(
       zipCode: { type: String },
     },
 
-    servicesOffered: [{ type: String }],
-
+    servicesOffered: {
+      type: [
+        {
+          type: String,
+          enum: [
+            "Teeth Cleaning",
+            "Fillings",
+            "Root Canal Therapy",
+            "Tooth Extraction",
+            "Dental Implants",
+            "Orthodontic Treatments",
+            "Cosmetic Dentistry",
+            "others",
+          ],
+        },
+      ],
+      unmentionedServiceOffered: { type: String },
+    },
     workingHours: {
       from: { type: String },
       to: { type: String },
