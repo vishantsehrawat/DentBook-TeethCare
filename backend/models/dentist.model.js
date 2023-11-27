@@ -11,7 +11,29 @@ const dentistSchema = new mongoose.Schema(
 
     practiceName: { type: String, required: true },
     registrationNumber: { type: String, required: true, unique: true },
-    specialization: [{ type: String, required: true }],
+    specialization: {
+      type: [
+        {
+          type: String,
+          enum: [
+            "General Dentistry",
+            "Orthodontics",
+            "Endodontics",
+            "Periodontics",
+            "Oral and Maxillofacial Surgery",
+            "Prosthodontics",
+            "Pediatric Dentistry",
+            "Dental Public Health",
+            "Oral Pathology",
+            "Oral Radiology",
+            "Cosmetic Dentistry",
+            "others",
+          ],
+        },
+      ],
+      required: true,
+    },
+    unmentionedSpecialization: { type: String },
     experienceYears: { type: Number },
     education: [
       {
