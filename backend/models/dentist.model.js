@@ -75,7 +75,7 @@ const dentistSchema = new mongoose.Schema(
     },
     appointmentHistory: [
       {
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
         appointmentDate: { type: Date },
         procedureBooked: { type: String },
         feedback: { type: String },
@@ -85,7 +85,7 @@ const dentistSchema = new mongoose.Schema(
 
     reviews: [
       {
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
         rating: { type: Number },
         comment: { type: String },
         timestamp: { type: Date },
@@ -99,6 +99,6 @@ const dentistSchema = new mongoose.Schema(
   { versionKey: false, timestamps: true }
 );
 
-const DentistModel = mongoose.model("Dentist", dentistSchema);
+const DentistModel = mongoose.model("dentist", dentistSchema);
 
 module.exports = { DentistModel };
