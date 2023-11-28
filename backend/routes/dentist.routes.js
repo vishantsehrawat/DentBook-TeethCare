@@ -13,6 +13,7 @@ const {
   getDentistAppointments,
   setDentistAvailability,
 } = require("../controllers/dentist.controller");
+const { RBACMiddleware } = require("../middlewares/rbacMiddleware");
 
 require("dotenv").config();
 
@@ -21,8 +22,6 @@ dentistRouter.post("/login", dentistLogin);
 dentistRouter.post("/register", registerDentist);
 
 dentistRouter.patch("/update/:id", authMiddleware, updateDentistDetails);
-
-dentistRouter.get("/get", getAllDentists);
 
 dentistRouter.get("/:id", authMiddleware, getDentistById);
 
@@ -41,7 +40,8 @@ dentistRouter.patch(
   authMiddleware,
   setDentistAvailability
 );
-
+// ~  admin only routes 
+dentistRouter.get("/get", RBACMiddleware(["superadmin"]), getAllDentists);
 module.exports = {
   dentistRouter,
 };
