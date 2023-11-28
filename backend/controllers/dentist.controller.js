@@ -237,7 +237,18 @@ const updateDentistDetails = async (req, res) => {
   }
 };
 
-
+const getAllDentists = async (req, res) => {
+  try {
+    const dentists = await DentistModel.find();
+    return res.status(200).json({ dentists, success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
 
 module.exports = {
   registerDentist,
