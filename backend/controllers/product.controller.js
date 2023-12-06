@@ -121,6 +121,40 @@ const getProductsByCategory = async (req, res) => {
   }
 };
 
+const getProductsByManufacturer = async (req, res) => {
+  const { manufacturerName } = req.params;
+
+  try {
+    const products = await ProductModel.find({
+      manufacturer: manufacturerName,
+    });
+    return res.status(200).json({ products, success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+const searchProducts = async (req, res) => {
+  const { query } = req.query;
+
+  try {
+    const products = await ProductModel.find({
+      $text: { $search: query },
+    });
+    return res.status(200).json({ products, success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
 
 
 module.exports = {
