@@ -31,6 +31,13 @@ const productSchema = new mongoose.Schema(
     },
     category: {
       type: String,
+      enum: [
+        "Toothpaste",
+        "Toothbrushes",
+        "Mouthwash",
+        "Dental Floss",
+        "Teeth Whitening",
+      ],
       required: true,
     },
     subCategory: {
