@@ -8,12 +8,15 @@ const { userRouter } = require("./routes/user.routes");
 const { dentistRouter } = require("./routes/dentist.routes");
 const { errorHandler } = require("./errors/errorHandler");
 const { productRouter } = require("./routes/product.routes");
+const { appointmentRouter } = require("./routes/appointment.routes");
 // ^ middlewares
+
 app.use(cors());
 app.use(express.json());
 app.use("/user", userRouter);
 app.use("/dentist", dentistRouter);
 app.use("/product", productRouter);
+app.use("/appointment", appointmentRouter);
 
 //~ Centralized Error handler
 app.use(errorHandler); // * will be used at the end
