@@ -155,7 +155,134 @@ const searchProducts = async (req, res) => {
   }
 };
 
+const getFeaturedProducts = async (req, res) => {
+  try {
+    const products = await ProductModel.find({ isFeatured: true });
+    return res.status(200).json({ products, success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
 
+const getRelatedProducts = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await ProductModel.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+        success: false,
+      });
+    }
+
+    const relatedProducts = await ProductModel.find({
+      category: product.category,
+      _id: { $ne: id },
+    }).limit(5);
+
+    return res.status(200).json({ relatedProducts, success: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+const addProductReview = async (req, res) => {
+  const { id } = req.params;
+  const { userId, review, rating } = req.body;
+
+  try {
+    const product = await ProductModel.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+        success: false,
+      });
+    }
+
+    product.reviews.push({ userId, review, rating });
+    product.ratings = (
+      (product.ratings * (product.reviews.length - 1) + rating) /
+      product.reviews.length
+    ).toFixed(1);
+    await product.save();
+
+    return res.status(200).json({
+      message: "Review added successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+const likeProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await ProductModel.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+        success: false,
+      });
+    }
+
+    product.likes += 1;
+    await product.save();
+
+    return res.status(200).json({
+      message: "Product liked successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+const shareProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await ProductModel.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+        success: false,
+      });
+    }
+
+    product.shares += 1;
+    await product.save();
+
+    return res.status(200).json({
+      message: "Product shared successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
 
 module.exports = {
   createProduct,
