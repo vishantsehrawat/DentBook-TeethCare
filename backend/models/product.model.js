@@ -37,6 +37,7 @@ const productSchema = new mongoose.Schema(
         "Mouthwash",
         "Dental Floss",
         "Teeth Whitening",
+        "other"
       ],
       required: true,
     },
