@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const swaggerUi = require("swagger-ui-express");
 
 require("dotenv").config();
 const { mongoConnection } = require("./database/mongodb.connection");
@@ -9,6 +10,7 @@ const { dentistRouter } = require("./routes/dentist.routes");
 const { errorHandler } = require("./errors/errorHandler");
 const { productRouter } = require("./routes/product.routes");
 const { appointmentRouter } = require("./routes/appointment.routes");
+const { specs } = require("./swagger/main");
 // ^ middlewares
 
 app.use(cors());
@@ -37,6 +39,12 @@ app.get("/", async (req, res) => {
   }
 });
 
+// ~ Swagger documentation
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs, { explorer: true })
+);
 app.listen(process.env.PORT, async () => {
   try {
     console.log("checking redis , db and server status");

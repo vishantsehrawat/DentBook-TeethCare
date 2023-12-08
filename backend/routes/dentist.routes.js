@@ -40,7 +40,7 @@ dentistRouter.patch(
   authMiddleware,
   setDentistAvailability
 );
-// ~  admin only routes 
+// ~  admin only routes
 dentistRouter.get("/get", RBACMiddleware(["superadmin"]), getAllDentists);
 module.exports = {
   dentistRouter,

@@ -27,6 +27,8 @@
     "redis": "^4.6.7",
     "speakeasy": "^2.0.0",
     "store": "^2.0.12",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "twilio": "^4.19.0",
     "uuid": "^9.0.0"
   }

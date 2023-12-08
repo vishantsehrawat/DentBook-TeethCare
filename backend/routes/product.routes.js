@@ -14,9 +14,9 @@ const {
   addProductReview,
   likeProduct,
   shareProduct,
-} = require("../controllers/productController");
+} = require("../controllers/product.controller");
 
-productRouter.post("/", createProduct);
+productRouter.post("/create", createProduct);
 
 productRouter.get("/:id", getProductById);
 

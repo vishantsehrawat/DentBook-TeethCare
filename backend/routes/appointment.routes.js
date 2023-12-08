@@ -1,5 +1,4 @@
 const express = require("express");
-const appointmentController = require("../controllers/appointmentController");
 const {
   getAllAppointments,
   getAppointmentById,
