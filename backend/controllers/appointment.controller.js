@@ -194,6 +194,38 @@ async function updateAppointmentStatus(req, res) {
     });
   }
 }
+async function searchAppointments(req, res) {
+  try {
+    const { startDate, endDate, appointmentType } = req.query;
+
+    let query = {};
+
+    if (startDate && endDate) {
+      query.appointmentDate = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    }
+    if (appointmentType) {
+      query.appointmentType = appointmentType;
+    }
+    const appointments = await AppointmentModel.find(query);
+
+    return res.status(200).json({
+      message: "Appointments found based on search criteria",
+      success: true,
+      appointments,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Failed to search appointments",
+      success: false,
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   createAppointment,
   getAllAppointments,
