@@ -96,6 +96,34 @@ async function updateAppointment(req, res) {
     });
   }
 }
+
+async function deleteAppointment(req, res) {
+  try {
+    const { appointmentId } = req.params;
+
+    const deletedAppointment = await AppointmentModel.findByIdAndDelete(
+      appointmentId
+    );
+
+    if (!deletedAppointment) {
+      return res
+        .status(404)
+        .json({ message: "Appointment not found", success: false });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Appointment deleted successfully", success: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Failed to delete appointment",
+      success: false,
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   createAppointment,
   getAllAppointments,
