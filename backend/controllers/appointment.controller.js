@@ -226,6 +226,29 @@ async function searchAppointments(req, res) {
   }
 }
 
+async function getUpcomingAppointments(req, res) {
+  try {
+    const currentDate = new Date();
+
+    const upcomingAppointments = await AppointmentModel.find({
+      appointmentDate: { $gte: currentDate },
+    });
+
+    return res.status(200).json({
+      message: "Upcoming appointments retrieved successfully",
+      success: true,
+      appointments: upcomingAppointments,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Failed to retrieve upcoming appointments",
+      success: false,
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   createAppointment,
   getAllAppointments,
