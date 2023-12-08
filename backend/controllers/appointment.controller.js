@@ -124,6 +124,24 @@ async function deleteAppointment(req, res) {
   }
 }
 
+async function getAppointmentsByUser(req, res) {
+  try {
+    const { userId } = req.params;
+
+    const userAppointments = await AppointmentModel.find({ userId });
+
+    return res
+      .status(200)
+      .json({ appointments: userAppointments, success: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Failed to fetch user appointments",
+      success: false,
+      error: error.message,
+    });
+  }
+}
 module.exports = {
   createAppointment,
   getAllAppointments,
