@@ -161,6 +161,39 @@ async function getAppointmentsByDentist(req, res) {
     });
   }
 }
+
+async function updateAppointmentStatus(req, res) {
+  try {
+    const { appointmentId } = req.params;
+    const { status } = req.body;
+
+    const appointment = await AppointmentModel.findByIdAndUpdate(
+      appointmentId,
+      { status },
+      { new: true }
+    );
+
+    if (!appointment) {
+      return res.status(404).json({
+        message: "Appointment not found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Appointment status updated successfully",
+      success: true,
+      appointment,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Failed to update appointment status",
+      success: false,
+      error: error.message,
+    });
+  }
+}
 module.exports = {
   createAppointment,
   getAllAppointments,
