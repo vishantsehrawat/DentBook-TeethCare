@@ -142,6 +142,25 @@ async function getAppointmentsByUser(req, res) {
     });
   }
 }
+
+async function getAppointmentsByDentist(req, res) {
+  try {
+    const { dentistId } = req.params;
+
+    const dentistAppointments = await AppointmentModel.find({ dentistId });
+
+    return res
+      .status(200)
+      .json({ appointments: dentistAppointments, success: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Failed to fetch dentist appointments",
+      success: false,
+      error: error.message,
+    });
+  }
+}
 module.exports = {
   createAppointment,
   getAllAppointments,
