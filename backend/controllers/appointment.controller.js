@@ -38,6 +38,32 @@ const getAllAppointments = async (req, res) => {
     });
   }
 };
+const getAppointmentById = async (req, res) => {
+  const appointmentId = req.params.appointmentId;
+
+  try {
+    const appointment = await AppointmentModel.findById(appointmentId);
+    if (!appointment) {
+      return res.status(404).json({
+        message: "Appointment not found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Appointment found successfully",
+      success: true,
+      appointment: appointment,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Cannot fetch appointment",
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   createAppointment,
