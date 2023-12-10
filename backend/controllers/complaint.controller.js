@@ -162,7 +162,36 @@ const getComplaintsByStatus = async (req, res) => {
   }
 };
 
+const resolveComplaint = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const resolvedComplaint = await ComplaintModel.findByIdAndUpdate(
+      id,
+      { status: "Resolved", closingDate: Date.now() },
+      { new: true }
+    );
 
+    if (!resolvedComplaint) {
+      return res.status(404).json({
+        message: "Complaint not found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Complaint resolved successfully",
+      success: true,
+      complaint: resolvedComplaint,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot resolve complaint",
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   createComplaint,
