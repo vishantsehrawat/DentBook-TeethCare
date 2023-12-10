@@ -58,6 +58,10 @@ const referralSchema = new mongoose.Schema({
     type: String,
     enum: ["Discount", "Points", "Free Product"],
   },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const ReferralModel = mongoose.model("Referral", referralSchema);
