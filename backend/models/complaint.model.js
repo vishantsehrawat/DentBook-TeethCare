@@ -31,9 +31,19 @@ const complaintSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  resolved: {
-    type: Boolean,
-    default: false,
+  status: {
+    type: String,
+    enum: ["Pending", "In Progress", "Resolved"],
+    default: "Pending",
+  },
+  severity: {
+    type: String,
+    enum: ["Low", "Medium", "High"],
+    default: "Low",
+  },
+  images: [String], // Array of image URLs
+  closingDate: {
+    type: Date,
   },
   timestamp: {
     type: Date,
