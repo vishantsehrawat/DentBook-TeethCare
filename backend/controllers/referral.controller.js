@@ -38,6 +38,61 @@ const getAllReferrals = async (req, res) => {
   }
 };
 
+const getReferralById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const referral = await ReferralModel.findById(id);
+    if (!referral) {
+      return res.status(404).json({
+        message: "Referral not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Referral fetched successfully",
+      success: true,
+      referral,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch referral",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const updateReferral = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedReferral = await ReferralModel.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true }
+    );
+    if (!updatedReferral) {
+      return res.status(404).json({
+        message: "Referral not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Referral updated successfully",
+      success: true,
+      referral: updatedReferral,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot update referral",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+
 
 module.exports = {
   createReferral,
