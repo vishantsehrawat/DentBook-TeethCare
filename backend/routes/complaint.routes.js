@@ -17,6 +17,14 @@ complaintRouter.get("/", getAllComplaints);
 
 complaintRouter.get("/:id", getComplaintById);
 
+complaintRouter.put("/:id", updateComplaint);
 
+complaintRouter.delete("/:id", deleteComplaint);
+
+complaintRouter.get("/user/:userId", getComplaintsByUser);
+
+complaintRouter.get("/status/:status", getComplaintsByStatus);
+
+complaintRouter.put("/:id/resolve", resolveComplaint);
 
 module.exports = { complaintRouter };
