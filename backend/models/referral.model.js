@@ -66,4 +66,4 @@ const referralSchema = new mongoose.Schema({
 
 const ReferralModel = mongoose.model("referral", referralSchema);
 
-module.exports = ReferralModel;
+module.exports = { ReferralModel };
