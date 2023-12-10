@@ -41,7 +41,7 @@ const complaintSchema = new mongoose.Schema({
     enum: ["Low", "Medium", "High"],
     default: "Low",
   },
-  images: [String], // Array of image URLs
+  images: [String], 
   closingDate: {
     type: Date,
   },
