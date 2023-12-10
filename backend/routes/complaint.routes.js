@@ -27,4 +27,8 @@ complaintRouter.get("/status/:status", getComplaintsByStatus);
 
 complaintRouter.put("/:id/resolve", resolveComplaint);
 
+complaintRouter.get("/severity/high", getHighSeverityComplaints);
+
+complaintRouter.get("/resolved", getResolvedComplaints);
+
 module.exports = { complaintRouter };
