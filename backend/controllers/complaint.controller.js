@@ -96,6 +96,34 @@ const updateComplaint = async (req, res) => {
   }
 };
 
+const deleteComplaint = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedComplaint = await ComplaintModel.findByIdAndDelete(id);
+
+    if (!deletedComplaint) {
+      return res.status(404).json({
+        message: "Complaint not found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Complaint deleted successfully",
+      success: true,
+      complaint: deletedComplaint,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot delete complaint",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+
 module.exports = {
   createComplaint,
   updateComplaint,
