@@ -193,7 +193,6 @@ const resolveComplaint = async (req, res) => {
   }
 };
 
-
 const getHighSeverityComplaints = async (req, res) => {
   try {
     const highSeverityComplaints = await ComplaintModel.find({
@@ -234,17 +233,15 @@ const getResolvedComplaints = async (req, res) => {
   }
 };
 
-
-  module.exports = {
-    createComplaint,
-    updateComplaint,
-    deleteComplaint,
-    getComplaintsByUser,
-    getComplaintsByStatus,
-    resolveComplaint,
-    getAllComplaints,
-    getComplaintById,
-    getHighSeverityComplaints,
-    getResolvedComplaints,
-  };
+module.exports = {
+  createComplaint,
+  updateComplaint,
+  deleteComplaint,
+  getComplaintsByUser,
+  getComplaintsByStatus,
+  resolveComplaint,
+  getAllComplaints,
+  getComplaintById,
+  getHighSeverityComplaints,
+  getResolvedComplaints,
 };
