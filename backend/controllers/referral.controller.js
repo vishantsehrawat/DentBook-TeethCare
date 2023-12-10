@@ -8,7 +8,7 @@ const createReferral = async (req, res) => {
     return res.status(201).json({
       message: "Referral created successfully",
       success: true,
-      referral: newReferral,
+      referral: newReferral,  
     });
   } catch (error) {
     console.error(error);
@@ -20,4 +20,30 @@ const createReferral = async (req, res) => {
   }
 };
 
-module.exports = { createReferral };
+const getAllReferrals = async (req, res) => {
+  try {
+    const referrals = await ReferralModel.find();
+    return res.status(200).json({
+      message: "All referrals fetched successfully",
+      success: true,
+      referrals,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch referrals",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+
+module.exports = {
+  createReferral,
+  getAllReferrals,
+  getReferralById,
+  updateReferral,
+  deleteReferral,
+  getReferralsByStatus,
+};
