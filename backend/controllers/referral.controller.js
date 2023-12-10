@@ -92,7 +92,49 @@ const updateReferral = async (req, res) => {
   }
 };
 
+const deleteReferral = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedReferral = await ReferralModel.findByIdAndDelete(id);
+    if (!deletedReferral) {
+      return res.status(404).json({
+        message: "Referral not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Referral deleted successfully",
+      success: true,
+      referral: deletedReferral,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot delete referral",
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
+const getReferralsByStatus = async (req, res) => {
+  try {
+    const { status } = req.params;
+    const referrals = await ReferralModel.find({ referralStatus: status });
+    return res.status(200).json({
+      message: "Referrals fetched by status successfully",
+      success: true,
+      referrals,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch referrals by status",
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   createReferral,
