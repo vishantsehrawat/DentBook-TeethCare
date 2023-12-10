@@ -193,13 +193,58 @@ const resolveComplaint = async (req, res) => {
   }
 };
 
-module.exports = {
-  createComplaint,
-  updateComplaint,
-  deleteComplaint,
-  getComplaintsByUser,
-  getComplaintsByStatus,
-  resolveComplaint,
-  getAllComplaints,
-  getComplaintById,
+
+const getHighSeverityComplaints = async (req, res) => {
+  try {
+    const highSeverityComplaints = await ComplaintModel.find({
+      severity: "High",
+    });
+    return res.status(200).json({
+      message: "High severity complaints fetched successfully",
+      success: true,
+      complaints: highSeverityComplaints,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch high severity complaints",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const getResolvedComplaints = async (req, res) => {
+  try {
+    const resolvedComplaints = await ComplaintModel.find({
+      status: "Resolved",
+    });
+    return res.status(200).json({
+      message: "Resolved complaints fetched successfully",
+      success: true,
+      complaints: resolvedComplaints,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch resolved complaints",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+
+  module.exports = {
+    createComplaint,
+    updateComplaint,
+    deleteComplaint,
+    getComplaintsByUser,
+    getComplaintsByStatus,
+    resolveComplaint,
+    getAllComplaints,
+    getComplaintById,
+    getHighSeverityComplaints,
+    getResolvedComplaints,
+  };
 };
