@@ -122,6 +122,46 @@ const deleteComplaint = async (req, res) => {
     });
   }
 };
+const getComplaintsByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const complaints = await ComplaintModel.find({ userId });
+
+    return res.status(200).json({
+      message: "Complaints fetched by user successfully",
+      success: true,
+      complaints,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch complaints by user",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const getComplaintsByStatus = async (req, res) => {
+  try {
+    const { status } = req.params;
+    const complaints = await ComplaintModel.find({ status });
+
+    return res.status(200).json({
+      message: `Complaints fetched by status  successfully`,
+      success: true,
+      complaints,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch complaints by status",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 
 
 module.exports = {
