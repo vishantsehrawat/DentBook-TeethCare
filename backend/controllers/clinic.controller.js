@@ -159,6 +159,56 @@ const getClinicsByRating = async (req, res) => {
     });
   }
 };
+
+const addReviewToClinic = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId, rating, comment } = req.body;
+
+    const clinic = await ClinicModel.findById(id);
+    if (!clinic) {
+      return res.status(404).json({
+        message: "Clinic not found",
+        success: false,
+      });
+    }
+
+    clinic.reviews.push({ userId, rating, comment });
+    await clinic.save();
+
+    return res.status(200).json({
+      message: "Review added to clinic successfully",
+      success: true,
+      clinic,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot add review to clinic",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+const getClinicsByDentist = async (req, res) => {
+  try {
+    const { dentistId } = req.params;
+    const clinics = await ClinicModel.find({ dentists: dentistId });
+
+    return res.status(200).json({
+      message: `Clinics associated with Dentist ID: ${dentistId} fetched successfully`,
+      success: true,
+      clinics,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch clinics by dentist",
+      success: false,
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   createClinic,
   getClinicById,
