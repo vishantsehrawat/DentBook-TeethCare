@@ -102,6 +102,24 @@ const deleteClinic = async (req, res) => {
   }
 };
 
+const getAllClinics = async (req, res) => {
+  try {
+    const clinics = await ClinicModel.find();
+    return res.status(200).json({
+      message: "All clinics fetched successfully",
+      success: true,
+      clinics,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch clinics",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createClinic,
   getClinicById,
