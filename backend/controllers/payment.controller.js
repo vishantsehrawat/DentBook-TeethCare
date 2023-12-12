@@ -20,6 +20,48 @@ const createPayment = async (req, res) => {
   }
 };
 
+const getAllPayments = async (req, res) => {
+  try {
+    const payments = await PaymentModel.find();
+    return res.status(200).json({
+      message: "All payments fetched successfully",
+      success: true,
+      payments,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch payments",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const getPaymentById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const payment = await PaymentModel.findById(id);
+    if (!payment) {
+      return res.status(404).json({
+        message: "Payment not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Payment fetched successfully",
+      success: true,
+      payment,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch payment",
+      success: false,
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   createPayment,
   getAllPayments,
