@@ -13,19 +13,22 @@ const { appointmentRouter } = require("./routes/appointment.routes");
 const { specs } = require("./swagger/main");
 const { complaintRouter } = require("./routes/complaint.routes");
 const { referralRouter } = require("./routes/referral.routes");
-// ^ middlewares
+const { clinicRouter } = require("./routes/clinic.routes");
 
+// ^ middlewares
 app.use(cors());
 app.use(express.json());
+//* AUTH  and RBAC middleware is added to individual route
 app.use("/user", userRouter);
 app.use("/dentist", dentistRouter);
 app.use("/product", productRouter);
 app.use("/appointment", appointmentRouter);
 app.use("/complaint", complaintRouter);
 app.use("/referral", referralRouter);
-
+app.use("/clinic", clinicRouter);
 //~ Centralized Error handler
 app.use(errorHandler); // * will be used at the end
+
 
 //home route
 app.get("/", async (req, res) => {
