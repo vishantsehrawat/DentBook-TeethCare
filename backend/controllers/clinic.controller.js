@@ -19,6 +19,63 @@ const createClinic = async (req, res) => {
     });
   }
 };
+
+
+const getClinicById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const clinic = await ClinicModel.findById(id);
+    if (!clinic) {
+      return res.status(404).json({
+        message: "Clinic not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Clinic fetched successfully",
+      success: true,
+      clinic,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch clinic",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const updateClinic = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedClinic = await ClinicModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedClinic) {
+      return res.status(404).json({
+        message: "Clinic not found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Clinic updated successfully",
+      success: true,
+      clinic: updatedClinic,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot update clinic",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createClinic,
   getClinicById,
