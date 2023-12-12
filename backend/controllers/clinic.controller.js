@@ -20,7 +20,6 @@ const createClinic = async (req, res) => {
   }
 };
 
-
 const getClinicById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -70,6 +69,33 @@ const updateClinic = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       message: "Cannot update clinic",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const deleteClinic = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedClinic = await ClinicModel.findByIdAndDelete(id);
+
+    if (!deletedClinic) {
+      return res.status(404).json({
+        message: "Clinic not found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Clinic deleted successfully",
+      success: true,
+      clinic: deletedClinic,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot delete clinic",
       success: false,
       error: error.message,
     });
