@@ -62,6 +62,59 @@ const getPaymentById = async (req, res) => {
     });
   }
 };
+
+const updatePayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedPayment = await PaymentModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedPayment) {
+      return res.status(404).json({
+        message: "Payment not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Payment updated successfully",
+      success: true,
+      payment: updatedPayment,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot update payment",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const deletePayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedPayment = await PaymentModel.findByIdAndDelete(id);
+    if (!deletedPayment) {
+      return res.status(404).json({
+        message: "Payment not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Payment deleted successfully",
+      success: true,
+      payment: deletedPayment,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot delete payment",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createPayment,
   getAllPayments,
