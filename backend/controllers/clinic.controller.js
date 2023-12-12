@@ -120,6 +120,45 @@ const getAllClinics = async (req, res) => {
   }
 };
 
+const getClinicsByService = async (req, res) => {
+  try {
+    const { service } = req.params;
+    const clinics = await ClinicModel.find({ servicesOffered: service });
+
+    return res.status(200).json({
+      message: `Clinics offering ${service} fetched successfully`,
+      success: true,
+      clinics,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch clinics by service",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const getClinicsByRating = async (req, res) => {
+  try {
+    const { rating } = req.params;
+    const clinics = await ClinicModel.find({ "ratings.overall": rating });
+
+    return res.status(200).json({
+      message: `Clinics with rating ${rating} fetched successfully`,
+      success: true,
+      clinics,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch clinics by rating",
+      success: false,
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   createClinic,
   getClinicById,
