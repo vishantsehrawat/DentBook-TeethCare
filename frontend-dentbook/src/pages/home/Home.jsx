@@ -1,15 +1,14 @@
 import React from "react";
 import dentistImage from "../../assets/images/dentistMain.png";
 import Searchbox from "./Searchbox";
-import "./Home.module.css";
 
 function Home() {
   return (
     <>
       {/* <Header /> will import it after creating header component  */}
-      <div className="homeContainer bg-gray-200 w-full">
-        <div className="mainSection container flex mx-auto py-8">
-          <div className="leftSection flex flex-col md:flex-row">
+      <div className="homeContainer bg-gray-200 w-full bg-gradient-to-br from-purple-600 via-pink-500 to-red-500">
+        <div className="mainSection container flex  border-emerald-400">
+          <div className="leftSection flex justify-center items-center border-red-100 ">
             <div className="searchWrapper flex justify-center items-center w-full md:w-1/2 p-4">
               <Searchbox />
             </div>
@@ -23,6 +22,8 @@ function Home() {
           </div>
         </div>
       </div>
+
+      
       {/* <Footer /> will import it after creating footer component  */}
     </>
   );
