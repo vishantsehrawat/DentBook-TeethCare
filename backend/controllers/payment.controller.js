@@ -115,6 +115,44 @@ const deletePayment = async (req, res) => {
   }
 };
 
+const getPaymentsByUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const payments = await PaymentModel.find({ userId });
+    return res.status(200).json({
+      message: "Payments fetched by user successfully",
+      success: true,
+      payments,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch payments by user",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+const getPaymentsByStatus = async (req, res) => {
+  try {
+    const { status } = req.params;
+    const payments = await PaymentModel.find({ status });
+    return res.status(200).json({
+      message: "Payments fetched by status successfully",
+      success: true,
+      payments,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Cannot fetch payments by status",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createPayment,
   getAllPayments,
