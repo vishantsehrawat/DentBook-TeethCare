@@ -161,8 +161,6 @@ const userSchema = new mongoose.Schema(
       },
     ],
 
-    favoriteHairstyles: [{ type: String }],
-
     // Dental Booking Specific Fields
     dentalHistory: {
       lastDentalVisit: { type: Date },
