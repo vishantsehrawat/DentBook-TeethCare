@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import searchHomepageApi from "../../api/searchHomepageApi";
 const Searchbox = () => {
   const [searchInput, setSearchInput] = useState("");
-
+  const dispatch = useDispatch();
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
-    // console.log(searchInput);
+    dispatch(searchHomepageApi());
   };
 
-  const data = useSelector((store) => {
-    return store;
+  const { data, isLoading, isError } = useSelector((store) => {
+    return store.reducer;
   });
-  console.log("🚀 ~ file: Searchbox.jsx:14 ~ data ~ data:", data)
   return (
     <div className="mainSearchContainer">
       <h2 className="mainHeading">Main Heading</h2>
@@ -30,6 +30,7 @@ const Searchbox = () => {
             }}
           />
           <button
+            disabled={isLoading}
             type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded-md"
           >
